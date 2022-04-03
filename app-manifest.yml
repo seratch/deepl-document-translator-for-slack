@@ -1,0 +1,26 @@
+display_information:
+  name: DeepL Document Translator
+  description: Generates translated documents from the ones uploaded in Slack
+  background_color: "#0b1f5c"
+features:
+  bot_user:
+    display_name: DeepL Document Translator
+    always_online: true
+oauth_config:
+  scopes:
+    bot:
+      - channels:history
+      - chat:write
+      - files:read
+      - files:write
+      - groups:history
+      - reactions:read
+      - im:write
+      - im:history
+settings:
+  event_subscriptions:
+    bot_events:
+      - reaction_added
+  interactivity:
+    is_enabled: true
+  socket_mode_enabled: true
