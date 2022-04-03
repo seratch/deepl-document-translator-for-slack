@@ -1,6 +1,6 @@
 # DeepL Document Translator for Slack
 
-This project demonstrates how to use DeepL's document translation API in Slack. With this app, you can translate the documents uploaded in Slack just by adding a national flag reaction emoji. When the translation is done, the app uploads the generated files in the original message's thread.
+This project demonstrates how to use [DeepL's document translation API](https://www.deepl.com/docs-api/translating-documents/) in [Slack](https://slack.com/). With this app, you can translate the documents uploaded in Slack just by adding a national flag reaction emoji. When the translation is done, the app uploads the generated files in the original message's thread.
 
 If you are looking for a solution to translate chat message text in Slack, try https://github.com/seratch/deepl-for-slack out for the purpose. You can use both apps together.
 
@@ -10,23 +10,27 @@ This app provides two features as below.
 
 ### Document translation
 
-When a user adds a reaction to a message with files, this app calls DeepL's document translation API.
-When the translation is done, this app uploads the result as a new file in the message's thread
+When a user adds a reaction to a message with files, this app calls [DeepL's document translation API](https://www.deepl.com/docs-api/translating-documents/).
+When the translation is done, this app uploads the result as a new file in the message's thread.
 
 <img width="500" src="https://user-images.githubusercontent.com/19658/161419367-c1b48d85-5bf7-4199-8857-66e5649f838a.png">
 
 ### Usage Dashboard
 
-Anyone in the Slack workspace can check the remaining usage of the DeepL APIs in the app's Home tab.
+Anyone in the Slack workspace can check the remaining amount of the DeepL API calls by accessing the app's Home tab.
 
 <img width="500" src="https://user-images.githubusercontent.com/19658/161419330-a459b6ee-e19e-4ab0-b06e-6f0b3be2fb77.png">
 
 ## Prerequisites
 
-* DeepL Pro (for Developers) account
-* Slack workspace and user account
+If you don't have any of the following accounts, create your accounts first.
+
+* [DeepL Pro (for Developers) account](https://www.deepl.com/pro/change-plan#developer)
+* [Slack workspace and user account](https://slack.com/)
 
 ## Setup
+
+All you need to do to run this app are DeepL API key and Slack app's tokens. Follow the below steps to get the credentials.
 
 ### Create your DeepL Pro (for Developers) account
 
@@ -79,20 +83,26 @@ settings:
   socket_mode_enabled: true
 ```
 
-## Install the Slack app into your Slack workspace
+### Install the Slack app into your Slack workspace
 
 Go to **Settings** > **Install App** and click the **Install to Workspace** button.
 You will use this `xoxb-` prefix token as `SLACK_BOT_TOKEN` env variable later.
 
-## Enable Socket Mode for the app
+### Enable Socket Mode for the app
 
 Go to **Settings** > **Basic Information** > **App-Level Tokens** and click the **Generate Tokens and Scopes** button.
 Create a new App-Level token with `connections:write` scope.
 You will use this `xapp-` prefix token as `SLACK_APP_TOKEN` env variable later.
 
-## Start your bolt-python app
+### Start your bolt-python app
+
+If you haven't installed [Poetry](https://python-poetry.org/) in your local machine, install the build tool first. Once you install the tool, run the following commands.
 
 ```bash
+git clone git@github.com:seratch/deepl-document-translator-for-slack.git
+cd deepl-document-translator-for-slack/
+
+# Python 3.9+ required
 poetry shell
 poetry install
 
