@@ -6,7 +6,7 @@ from typing import Optional
 
 import deepl
 import requests
-from deepl import DocumentHandle
+from deepl import DocumentHandle, DocumentStatus
 from slack_bolt import App, Say, BoltContext, Ack
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from slack_sdk import WebClient
@@ -210,6 +210,7 @@ def handle_reaction_added_events(
                 "We will post a translated file once the translation is done! :bow:",
             )
 
+            status: Optional[DocumentStatus] = None
             try:
                 status = translator.translate_document_get_status(handle)
                 while status.ok and not status.done:
@@ -228,7 +229,7 @@ def handle_reaction_added_events(
                 )
                 return
 
-            if not status.ok:
+            if status is None or not status.ok:
                 say(
                     thread_ts=thread_ts,
                     # TODO: improve this message to have the error details (need to enhance the DeepL SDK)
@@ -246,7 +247,8 @@ def handle_reaction_added_events(
                 channels=[channel],
                 thread_ts=thread_ts,
                 initial_comment=f"Hey <@{context.user_id}>, thanks for waiting!"
-                f"Here is :{reaction_name}: (lang: {lang}) translation of `{original_name}` :white_check_mark:",
+                f"Here is :{reaction_name}: (lang: {lang}) translation of `{original_name}` :white_check_mark:\n"
+                f"(Spent: {status.billed_characters} characters)",
             )
         finally:
             output_document.close()

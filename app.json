@@ -1,0 +1,27 @@
+{
+  "name": "DeepL Document Translator for Slack",
+  "description": "Slack app for DeepL Document Translation API users",
+  "repository": "https://github.com/seratch/deepl-document-translator-for-slack",
+  "keywords": [
+    "Slack",
+    "Slack API",
+    "DeepL Pro",
+    "DeepL API",
+    "Heroku"
+  ],
+  "env": {
+    "SLACK_APP_TOKEN": {
+      "description": "Slack App-Level Token (https://api.slack.com/apps)",
+      "value": "xapp-**"
+    },
+    "SLACK_BOT_TOKEN": {
+      "description": "Slack Bot Token (https://api.slack.com/apps)",
+      "value": "xoxb-**"
+    },
+    "DEEPL_AUTH_KEY": {
+      "description": "DeepL API Auth Key (https://www.deepl.com/pro-account.html)",
+      "value": "***"
+    }
+  },
+  "image": "heroku/python"
+}

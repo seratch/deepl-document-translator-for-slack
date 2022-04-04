@@ -13,7 +13,7 @@ This app provides two features as below.
 When a user adds a reaction to a message with files, this app calls [DeepL's document translation API](https://www.deepl.com/docs-api/translating-documents/).
 When the translation is done, this app uploads the result as a new file in the message's thread.
 
-<img width="500" src="https://user-images.githubusercontent.com/19658/161464009-fc530afc-36bb-4eb8-a491-98dbb6389552.png">
+<img width="500" src="https://user-images.githubusercontent.com/19658/161482554-fe0828c1-4058-4cab-9b20-0c7af9bbdb6b.png">
 
 ### Usage Dashboard
 
@@ -40,10 +40,12 @@ All you need to do to run this app are DeepL API key and Slack app's tokens. Fol
 
 You will use this token as `DEEPL_AUTH_KEY` env variable later.
 
+Also, if your app allows your end-users to translate PDF files as well, go to [Translation Settings](https://www.deepl.com/pro-account/translationSettings) and enable the "Allow PDF files to be sent to Adobe for all your future translations" option.
+
 Refer to the following resources for more details:
 
-* https://www.deepl.com/en/pro/
 * https://www.deepl.com/docs-api/
+* https://www.deepl.com/pro/change-plan#developer
 
 ### Create your Slack App
 
@@ -112,6 +114,13 @@ export SLACK_BOT_TOKEN=xoxb-...
 
 python app.py
 ```
+
+## Deployments
+
+[![Deploy](https://www.herokucdn.com/deploy/button.svg)](https://heroku.com/deploy?template=https://github.com/seratch/deepl-document-translator-for-slack/tree/main)
+
+> If you encounter "We couldn't deploy your app because the source code violates the Salesforce Acceptable Use and External-Facing Services Policy." error with the above button,
+> please fork this repository and use your own URL like `https://heroku.com/deploy?template=https://github.com/{your account}/deepl-document-translator-for-slack/tree/main`.
 
 ## Related Projects
 
