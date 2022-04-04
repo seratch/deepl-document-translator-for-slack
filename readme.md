@@ -13,7 +13,7 @@ This app provides two features as below.
 When a user adds a reaction to a message with files, this app calls [DeepL's document translation API](https://www.deepl.com/docs-api/translating-documents/).
 When the translation is done, this app uploads the result as a new file in the message's thread.
 
-<img width="500" src="https://user-images.githubusercontent.com/19658/161419367-c1b48d85-5bf7-4199-8857-66e5649f838a.png">
+<img width="500" src="https://user-images.githubusercontent.com/19658/161464009-fc530afc-36bb-4eb8-a491-98dbb6389552.png">
 
 ### Usage Dashboard
 

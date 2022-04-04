@@ -5,7 +5,7 @@ reaction_to_lang = {
     "ac": "en-us",
     "ag": "en-us",
     "ai": "en-us",
-    "ao": "pt",
+    "ao": "pt-pt",
     "ar": "es",
     "as": "en-us",
     "at": "de",
@@ -20,7 +20,7 @@ reaction_to_lang = {
     "bn": "en-us",
     "bo": "es",
     "bq": "nl",
-    "br": "pt",
+    "br": "pt-br",
     "bs": "en-us",
     "bw": "en-us",
     "bz": "en-us",
@@ -38,7 +38,7 @@ reaction_to_lang = {
     "cp": "fr",
     "cr": "es",
     "cu": "es",
-    "cv": "pt",
+    "cv": "pt-pt",
     "cw": "nl",
     "cx": "en-us",
     "de": "de",
@@ -47,6 +47,7 @@ reaction_to_lang = {
     "do": "es",
     "ea": "es",
     "ec": "es",
+    "england": "en-gb",
     "es": "es",
     "fj": "en-us",
     "fk": "en-us",
@@ -66,10 +67,11 @@ reaction_to_lang = {
     "gs": "en-us",
     "gt": "es",
     "gu": "en-us",
-    "gw": "pt",
+    "gw": "pt-pt",
     "gy": "en-us",
     "hn": "es",
     "ic": "es",
+    "ie": "en-gb",
     "im": "en-us",
     "io": "en-us",
     "it": "it",
@@ -91,7 +93,7 @@ reaction_to_lang = {
     "mu": "en-us",
     "mw": "en-us",
     "mx": "es",
-    "mz": "pt",
+    "mz": "pt-pt",
     "na": "en-us",
     "nc": "fr",
     "ne": "fr",
@@ -107,13 +109,14 @@ reaction_to_lang = {
     "pm": "fr",
     "pn": "en-us",
     "pr": "es",
-    "pt": "pt",
+    "pt-pt": "pt-pt",
     "pw": "en-us",
     "py": "es",
     "re": "fr",
     "ru": "ru",
     "sb": "en-us",
     "sc": "en-us",
+    "scotland": "en-gb",
     "sg": "en-us",
     "sh": "en-us",
     "sl": "en-us",
@@ -121,7 +124,7 @@ reaction_to_lang = {
     "sn": "fr",
     "sr": "nl",
     "ss": "en-us",
-    "st": "pt",
+    "st": "pt-pt",
     "sv": "es",
     "sx": "nl",
     "ta": "en-us",
@@ -140,15 +143,15 @@ reaction_to_lang = {
     "vg": "en-us",
     "vi": "en-us",
     "wf": "fr",
+    "wales": "en-gb",
     "yt": "fr",
     "zm": "en-us",
     "zw": "en-us",
 }
 
 
-def detect_lang(event: dict) -> Optional[str]:
-    reaction_name = event.get("reaction")
-    m = re.findall("/(?!flag-\b)\b\\w+/", reaction_name)
+def detect_lang(reaction_name: str) -> Optional[str]:
+    m = re.findall(r"flag-(\w+)", reaction_name)
     if m is not None and m != []:
         country = m[0]
         return reaction_to_lang.get(country)

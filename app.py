@@ -2,9 +2,11 @@ import io
 import logging
 import os
 import time
+from typing import Optional
 
 import deepl
 import requests
+from deepl import DocumentHandle
 from slack_bolt import App, Say, BoltContext, Ack
 from slack_bolt.adapter.socket_mode import SocketModeHandler
 from slack_sdk import WebClient
@@ -105,7 +107,11 @@ def handle_some_action(ack: Ack):
 
 @app.event("reaction_added")
 def handle_reaction_added_events(
-    event: dict, say: Say, client: WebClient, logger: logging.Logger
+    event: dict,
+    context: BoltContext,
+    say: Say,
+    client: WebClient,
+    logger: logging.Logger,
 ):
     item = event.get("item", {})
     if item.get("type") != "message":
@@ -115,11 +121,17 @@ def handle_reaction_added_events(
     if channel is None or ts is None:
         logger.debug("Skipped because either channel or ts is missing")
         return
-    lang = detect_lang(event)
+    reaction_name: str = event.get("reaction")
+    lang = detect_lang(reaction_name)
     if lang is None:
         logger.debug(
             f"Skipped because no lang detected from the reaction ({event.get('reaction')})"
         )
+        if reaction_name.startswith("flag-"):
+            say(
+                thread_ts=ts,
+                text=f"Hey <@{context.user_id}>, the language used in {reaction_name} is not yet supported.",
+            )
         return
     replies = client.conversations_replies(
         channel=channel,
@@ -150,7 +162,7 @@ def handle_reaction_added_events(
 
         already_translated = False
         for message in replies.get("messages"):
-            # check if the translated file is already uploaded
+            # Check if the translated file is already uploaded
             if (
                 message.get("files") is not None
                 and message.get("files")[0].get("name") == translated_file_name
@@ -164,17 +176,38 @@ def handle_reaction_added_events(
         if already_translated:
             continue
 
-        # call DeepL API
+        # Download the Slack file content
         input_document = requests.get(
             url=file.get("url_private_download"),
             headers={"Authorization": f"Bearer {client.token}"},
         ).content
+        # The IO object to save the result file data returned from DeepL
         output_document = io.BytesIO()
+
+        # Calling DeepL API
         try:
-            handle = translator.translate_document_upload(
-                input_document,
-                target_lang=lang.upper(),
-                filename=translated_file_name,
+            handle: Optional[DocumentHandle] = None
+            try:
+                handle = translator.translate_document_upload(
+                    input_document,
+                    target_lang=lang.upper(),
+                    filename=translated_file_name,
+                )
+            except Exception as e:
+                say(
+                    thread_ts=ts,
+                    text=f"Hey <@{context.user_id}>, we failed to translate the document "
+                    f"into the language used in :{reaction_name}:. "
+                    f"(file: {original_name}, lang: {lang}, error: ${e})",
+                )
+                return
+
+            say(
+                thread_ts=thread_ts,
+                text=f"Hey <@{context.user_id}>, "
+                f"thanks for requesting :{reaction_name}: (lang: {lang}) translation of `{original_name}`! "
+                "The DeepL backend is now working on the task :man-biking: "
+                "We will post a translated file once the translation is done! :bow:",
             )
 
             try:
@@ -190,14 +223,18 @@ def handle_reaction_added_events(
             except Exception as e:
                 say(
                     thread_ts=thread_ts,
-                    text=f"Failed to translate the document (error: {e})",
+                    text=":x: Failed to translate the document "
+                    f"(file: {original_name}, reaction: :{reaction_name}:, lang: {lang}, error: {e})",
                 )
                 return
 
             if not status.ok:
                 say(
                     thread_ts=thread_ts,
-                    text=f"Failed to translate the document for some reason",
+                    # TODO: improve this message to have the error details (need to enhance the DeepL SDK)
+                    text=":x: Failed to translate the document for some reason. "
+                    "The common pattern is that the original document is already written in the target language. "
+                    f"(file: {original_name}, reaction: :{reaction_name}:, lang: {lang})",
                 )
                 return
 
@@ -208,7 +245,8 @@ def handle_reaction_added_events(
                 file=output_document,
                 channels=[channel],
                 thread_ts=thread_ts,
-                initial_comment=f"Here is the {lang} translation of {original_name} :wave:",
+                initial_comment=f"Hey <@{context.user_id}>, thanks for waiting!"
+                f"Here is :{reaction_name}: (lang: {lang}) translation of `{original_name}` :white_check_mark:",
             )
         finally:
             output_document.close()
