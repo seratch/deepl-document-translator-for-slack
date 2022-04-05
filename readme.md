@@ -8,7 +8,7 @@ If you are looking for a solution to translate chat message text in Slack, try h
 
 This app provides two features as below.
 
-### Document translation
+### Document Translator in Slack Channels
 
 When a user adds a reaction to a message with files, this app calls [DeepL's document translation API](https://www.deepl.com/docs-api/translating-documents/).
 When the translation is done, this app uploads the result as a new file in the message's thread.
@@ -40,7 +40,7 @@ All you need to do to run this app are DeepL API key and Slack app's tokens. Fol
 
 You will use this token as `DEEPL_AUTH_KEY` env variable later.
 
-Also, if your app allows your end-users to translate PDF files as well, go to [Translation Settings](https://www.deepl.com/pro-account/translationSettings) and enable the "Allow PDF files to be sent to Adobe for all your future translations" option.
+Also, if your app allows your end-users to translate **PDF files** too, go to [Translation Settings](https://www.deepl.com/pro-account/translationSettings) and enable the "Allow PDF files to be sent to Adobe for all your future translations" option.
 
 Refer to the following resources for more details:
 
