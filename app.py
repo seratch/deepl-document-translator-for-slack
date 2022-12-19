@@ -144,11 +144,11 @@ def handle_reaction_added_events(
         "ts"
     ) != parent_message.get("thread_ts"):
         logger.debug(
-            f"Skipped because this is a reaction to any of the thread replies ({event.get('reaction')})"
+            f"Skipped because this is a reaction to a thread reply ({event.get('reaction')})"
         )
         return
     if parent_message.get("files") is None:
-        logger.debug("Skipped because the parent message does not any files")
+        logger.debug("Skipped because the parent message does not have any files")
         return
 
     thread_ts = parent_message.get("ts")
